@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: bikesharing
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bikedb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: bikesharing
+      DB_PASSWORD: password
+      DB_NAME: bikedb
+
+volumes:
+  db_data:
